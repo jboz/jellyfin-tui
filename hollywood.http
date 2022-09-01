@@ -1,0 +1,30 @@
+#https://swagger.emby.media/?url=https://hollywood.banan4.com/emby/openapi&api_key=8ecb81d845904593854e886717c38807
+
+@key=8ecb81d845904593854e886717c38807
+@api=https://hollywood.banan4.com/emby
+@darkvador=d864ce1bebb34e248072a4a54707344e
+@videoId=121930
+
+###
+GET {{api}}/System/Info?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Users?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Users/{{darkvador}}/Items/Latest?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Library/MediaFolders?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Items?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Videos/{{videoId}}/stream.mkv?api_key={{key}}
+Accept: application/json

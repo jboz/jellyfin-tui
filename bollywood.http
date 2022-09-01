@@ -1,0 +1,36 @@
+#https://api.jellyfin.org/openapi/
+#https://api.jellyfin.org/
+
+@key=ce6d86b7be8e42e1988a3149fafa5d82
+@api=https://bollywood.banan4.com
+@julien=2c7de5c00eca4ac2bc70b4e0ff55d657
+@videoId=59c9d96980979185d39321aa2e8f4976
+@filmsParents=b0ff7473b9f56ce09d9ea83dc83b1c55
+
+###
+GET {{api}}/System/Info?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Users?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Users/{{julien}}/Items/Latest?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Items/{{videoId}}/Images/Primary
+    ?api_key={{key}}
+    &fillHeight=496
+    &fillWidth=331
+    &quality=96
+Accept: application/json
+
+###
+GET {{api}}/Library/MediaFolders?api_key={{key}}
+Accept: application/json
+
+###
+GET {{api}}/Videos/{{videoId}}/stream.mkv?api_key={{key}}
+Accept: application/json
