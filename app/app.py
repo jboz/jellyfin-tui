@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+from cProfile import label
+
 from rich.box import SQUARE_DOUBLE_HEAD
 from rich.console import RenderableType
 from rich.panel import Panel
@@ -8,26 +10,34 @@ from rich.table import Table
 from rich.text import Text
 from textual import events
 from textual.app import App
+from textual.reactive import Reactive
 from textual.views import GridView
 from textual.widget import Widget
 
-from api import getLatestVideos
+from api import *
+from player import player
 
 
 class Item(Widget):
 
-    def __init__(
-        self,
-        title: str | None = "Item"
-    ) -> None:
+    action: Reactive[RenderableType] = Reactive("")
+
+    def __init__(self, title: str, video_id: str) -> None:
         super().__init__(name=title)
         self.title = title
+        self.video_id = video_id
 
     def render(self) -> RenderableType:
         table = Table.grid(padding=(0, 1), expand=True)
         # table.add_column(i, justify="center", ratio=1)
         table.add_row(Text(self.title))
+        # table.add_row(Text(self.action))
         return Panel(table, height=3, box=SQUARE_DOUBLE_HEAD)
+
+    def on_click(self) -> None:
+        url = getVideoStreamUrl(self.video_id)
+        player.play(url)
+        player.wait_for_playback()
 
 
 class Items(GridView):
@@ -40,7 +50,8 @@ class Items(GridView):
             center="col-2-start|col-4-end,row-2-start|row-3-end")
         self.grid.set_align("stretch", "center")
 
-        items = map(lambda item: Item(title=item['name']), getLatestVideos())
+        items = map(lambda item: Item(
+            title=item['title'], video_id=item['id']), getLatestVideos())
         self.grid.place(*items)
 
 
@@ -52,6 +63,9 @@ class MainApp(App):
 
     async def on_load(self) -> None:
         await self.bind("ctrl+q", "quit", "Quit")
+
+    async def on_shutdown_request(self):
+        del player
 
     async def action_quit(self) -> None:
         await self.on_key(events.Key(self, "escape"))  # incase of empty todo
