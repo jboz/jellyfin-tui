@@ -9,15 +9,7 @@ def time_observer(_name, value):
     print('Now playing at {:.2f}s'.format(value))
 
 
-# player.fullscreen = True
-# player.loop_playlist = 'inf'
 player['vo'] = 'gpu'
-
-
-@player.on_key_press('s')
-def my_s_binding():
-    pillow_img = player.screenshot_raw()
-    pillow_img.save('hollywood.screenshot.png')
 
 
 if __name__ == "__main__":
