@@ -1,4 +1,3 @@
-
 import requests
 
 api = "https://bollywood.banan4.com"
@@ -30,8 +29,7 @@ def getLatestVideos():
     return map(lambda item: dict(
         id=item['Id'],
         title=item['Name'],
-        year=item['ProductionYear'] if 'ProductionYear' in item else None,
-        containers=item['Container']
+        year=item['ProductionYear'] if 'ProductionYear' in item else None
     ), items)
 
 

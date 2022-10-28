@@ -2,8 +2,9 @@
 # encoding: utf-8
 
 from cProfile import label
+from unicodedata import numeric
 
-from rich.box import SQUARE_DOUBLE_HEAD
+from rich.box import ROUNDED
 from rich.console import RenderableType
 from rich.panel import Panel
 from rich.table import Table
@@ -32,7 +33,7 @@ class Item(Widget):
         # table.add_column(i, justify="center", ratio=1)
         table.add_row(Text(self.title))
         # table.add_row(Text(self.action))
-        return Panel(table, height=3, box=SQUARE_DOUBLE_HEAD)
+        return Panel(table, height=10, box=ROUNDED)
 
     def on_click(self) -> None:
         url = getVideoStreamUrl(self.video_id)
@@ -50,19 +51,32 @@ class Items(GridView):
             center="col-2-start|col-4-end,row-2-start|row-3-end")
         self.grid.set_align("stretch", "center")
 
-        items = map(lambda item: Item(
-            title=item['title'], video_id=item['id']), getLatestVideos())
+        self.videos = getLatestVideos()
+        items = map(self._createItemFromVideo, self.videos)
         self.grid.place(*items)
+
+    def _createItemFromVideo(self, video):
+        return Item(title=video['title'], video_id=video['id'])
+
+    async def key_press(self, event: events.Key) -> None:
+        print("event {}".format(event))
 
 
 class MainApp(App):
     async def on_mount(self) -> None:
         # await self.view.dock(Header(tall=False), edge="top", size=3)
         # await self.view.dock(Placeholder(name="stats"), edge="left", size=40)
-        await self.view.dock(Items(), edge="top")
+        self.videosList = Items()
+        await self.view.dock(self.videosList, edge="top")
 
     async def on_load(self) -> None:
         await self.bind("ctrl+q", "quit", "Quit")
+
+    async def key_press(self, event: events.Key) -> None:
+        print("event {}".format(event))
+
+    async def action_selectNextItem(self) -> None:
+        self.state['selection'] = self.state['selection'] + 1
 
     async def on_shutdown_request(self):
         del player

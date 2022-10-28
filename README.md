@@ -14,6 +14,9 @@ Install dep:
 
 ```bash
 pipenv shell
+# install all deps
+pipenv install
+## add dep
 pipenv install requests
 ```
 
@@ -30,6 +33,7 @@ TODO:
 - [x] lister les dernière vidéos ajoutées
 - [x] clique sur les items pour lire la vidéo avec mpv
 - [ ] navigation avec le clavier
+  - [ ] sélection de la vidéo
 - [ ] fermeture clean du player
 - [ ] afficher la jaquette
 - [ ] chargement parallèle
